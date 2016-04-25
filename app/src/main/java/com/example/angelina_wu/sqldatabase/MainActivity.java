@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
         mHelper = new DBHelper(this);
         mHelper.close();
         mShowDataTextView = (TextView) findViewById(R.id.showData);
+        //add line
     }
 
     public void add(View view) {
