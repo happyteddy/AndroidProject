@@ -35,18 +35,12 @@ public class DBHelper extends SQLiteOpenHelper {
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        /*final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
-        db.execSQL(DROP_TABLE);
-        onCreate(db);*/
-
         if (newVersion == 2 ) {
             db.execSQL("ALTER TABLE information ADD COLUMN sex CHAR  ");
-        }
-        else if (newVersion == 3 ) {
+        } else if (newVersion == 3 ) {
             db.execSQL("ALTER TABLE information ADD COLUMN student BOOLEAN DEFAULT flase");
-        }
-        else{
-
+        } else{
+            // if version > 3 no change
         }
     }
 }

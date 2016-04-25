@@ -14,22 +14,22 @@ import static com.example.angelina_wu.sqldatabase.DBHelper.TABLE_NAME;
 import static com.example.angelina_wu.sqldatabase.DBHelper.USER_NAME;
 
 public class MainActivity extends AppCompatActivity {
-    private DBHelper helper = null;
-    TextView result = null;
-    int version = 1;
+    private DBHelper mHelper = null;
+    TextView mShowDataTextView = null;
+    int mVersion = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        helper = new DBHelper(this);
-        helper.close();
-        result = (TextView) findViewById(R.id.showData);
+        mHelper = new DBHelper(this);
+        mHelper.close();
+        mShowDataTextView = (TextView) findViewById(R.id.showData);
     }
 
     public void add(View view) {
         EditText userName = (EditText) findViewById(R.id.enterUserName);
-        SQLiteDatabase db = helper.getWritableDatabase();
+        SQLiteDatabase db = mHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(USER_NAME, userName.getText().toString());
         db.insert(TABLE_NAME, null, values);
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void show(View view) {
 
-        SQLiteDatabase db = helper.getReadableDatabase();
+        SQLiteDatabase db = mHelper.getReadableDatabase();
         String[] projection = { _ID , USER_NAME  };
         Cursor c = db.query( TABLE_NAME, projection, null, null, null, null, null );
 
@@ -49,11 +49,11 @@ public class MainActivity extends AppCompatActivity {
             resultData.append(name).append(", ");
             resultData.append("\n");
         }
-        result.setText(resultData);
+        mShowDataTextView.setText(resultData);
     }
     public void upgrade(View view) {
-        SQLiteDatabase db = helper.getWritableDatabase();
-        version = version + 1 ;
-        helper.onUpgrade( db, helper.getVersion(), version);
+        SQLiteDatabase db = mHelper.getWritableDatabase();
+        mVersion = mVersion + 1 ;
+        mHelper.onUpgrade(db, mHelper.getVersion(), mVersion);
     }
 }
