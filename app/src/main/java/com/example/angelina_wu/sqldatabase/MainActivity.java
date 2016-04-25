@@ -57,5 +57,6 @@ public class MainActivity extends AppCompatActivity {
         mVersion = mVersion + 1 ;
         mHelper.onUpgrade(db, mHelper.getVersion(), mVersion);
         //add line1
+        //add line2
     }
 }
