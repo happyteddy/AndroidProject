@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">SQL Database</string>
+    <string name="userName">User Name</string>
+    <string name="add">Add</string>
+    <string name="show">Show</string>
+    <string name="data">Data</string>
+</resources>
