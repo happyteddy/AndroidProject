@@ -16,7 +16,7 @@ import static com.example.angelina_wu.sqldatabase.DBHelper.USER_NAME;
 public class MainActivity extends AppCompatActivity {
     private DBHelper helper = null;
     TextView result = null;
-    int userId = 1 ;
+    int version = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
         ContentValues values = new ContentValues();
         values.put(USER_NAME, userName.getText().toString());
         db.insert(TABLE_NAME, null, values);
-        userId = userId + 1 ;
     }
 
     public void show(View view) {
@@ -51,5 +50,10 @@ public class MainActivity extends AppCompatActivity {
             resultData.append("\n");
         }
         result.setText(resultData);
+    }
+    public void upgrade(View view) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+        version = version + 1 ;
+        helper.onUpgrade( db, helper.getVersion(), version);
     }
 }

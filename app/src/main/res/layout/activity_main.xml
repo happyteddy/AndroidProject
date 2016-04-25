@@ -18,18 +18,37 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/data" />
-    <Button
-        android:id="@+id/addButton"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/add"
-        android:onClick="add"/>
-    <Button
-        android:id="@+id/showButton"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/show"
-        android:onClick="show"/>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <Button
+            android:id="@+id/addButton"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/add"
+            android:onClick="add"/>
+        <Button
+            android:id="@+id/showButton"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/show"
+            android:onClick="show"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+        <Button
+            android:id="@+id/upgradeButton"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/upgrade"
+            android:onClick="upgrade"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+
+
 </LinearLayout>
