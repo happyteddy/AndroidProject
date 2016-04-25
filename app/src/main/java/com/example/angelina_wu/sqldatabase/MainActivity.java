@@ -56,5 +56,6 @@ public class MainActivity extends AppCompatActivity {
         SQLiteDatabase db = mHelper.getWritableDatabase();
         mVersion = mVersion + 1 ;
         mHelper.onUpgrade(db, mHelper.getVersion(), mVersion);
+        //add line1
     }
 }
