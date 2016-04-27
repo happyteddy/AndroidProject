@@ -45,12 +45,24 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true" />
     </RelativeLayout>
-
-    <EditText
-        android:id="@+id/editUserName"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/userName" />
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/editUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/userName" />
+        <EditText
+            android:id="@+id/editScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/score"
+            android:inputType="number"
+            android:layout_toEndOf="@+id/editUserName" />
+
+
+    </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

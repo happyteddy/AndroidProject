@@ -9,6 +9,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String TABLE_NAME = "information";
     public static final String USER_NAME = "name";
+    public static final String USER_SCORE = "score";
     private static final int VERSION = 1;
     private final static String DATABASE_NAME = "info.db";
 
@@ -21,7 +22,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        final String INIT_TABLE = "CREATE TABLE " + TABLE_NAME + " ("+_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +  USER_NAME + " CHAR);" ;
+        final String INIT_TABLE = "CREATE TABLE " + TABLE_NAME + " ("+_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +  USER_NAME + " CHAR" + USER_SCORE + "INTEGER );" ;
         db.execSQL(INIT_TABLE);
     }
 

@@ -15,6 +15,7 @@ import android.widget.TextView;
 import static android.provider.BaseColumns._ID;
 import static com.example.angelina_wu.sqldatabase.DBHelper.TABLE_NAME;
 import static com.example.angelina_wu.sqldatabase.DBHelper.USER_NAME;
+import static com.example.angelina_wu.sqldatabase.DBHelper.USER_SCORE;
 
 public class MainActivity extends AppCompatActivity {
     private DBHelper mHelper = null;
@@ -32,9 +33,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void add(View view) { //  Insert
         EditText userName = (EditText) findViewById(R.id.editUserName);
+        EditText score = (EditText) findViewById(R.id.editScore);
         SQLiteDatabase db = mHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(USER_NAME, userName.getText().toString());
+        values.put(USER_SCORE, Integer.getInteger(score.getText().toString()));
         db.insert(TABLE_NAME, null, values);
         userName.setText(""); // clear editText
     }
@@ -42,15 +45,17 @@ public class MainActivity extends AppCompatActivity {
     public void show(View view) { //  Query
 
         SQLiteDatabase db = mHelper.getReadableDatabase();
-        String[] projection = { _ID , USER_NAME  };
+        String[] projection = { _ID, USER_NAME, USER_SCORE };
         Cursor c = db.query( TABLE_NAME, projection, null, null, null, null, null );
 
         StringBuilder resultData = new StringBuilder("RESULT: \n");
         while(c.moveToNext()){
             int id = c.getInt(0);
             String name = c.getString(1);
+            int score = c.getInt(2);
             resultData.append(id).append(": ");
-            resultData.append(name).append(", ");
+            resultData.append(name).append(" - ");
+            resultData.append(score);
             resultData.append("\n");
         }
         c.close();
