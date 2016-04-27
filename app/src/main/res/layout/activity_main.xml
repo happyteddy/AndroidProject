@@ -17,7 +17,15 @@
         android:layout_gravity="center"
         android:text="@string/show"
         android:onClick="show"
-        android:layout_alignParentTop="true"     />
+        android:layout_alignParentTop="true"/>
+        <Button
+            android:id="@+id/showButton_First"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/showfirst"
+            android:onClick="showFirstData"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
         <Button
             android:id="@+id/showButton_Name"
             android:layout_width="wrap_content"
@@ -26,7 +34,7 @@
             android:text="@string/showname"
             android:onClick="showSortByName"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_toEndOf="@+id/showButton" />
         <Button
             android:id="@+id/upgradeButton"
             android:layout_width="wrap_content"

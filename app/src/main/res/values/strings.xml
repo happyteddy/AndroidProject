@@ -4,6 +4,7 @@
     <string name="add">Add</string>
     <string name="show">Show</string>
     <string name="showname">Show/name</string>
+    <string name="showfirst">Show/first</string>
     <string name="data">Data</string>
     <string name="upgrade">Upgrade</string>
     <string name="deleteData">Delete data: </string>

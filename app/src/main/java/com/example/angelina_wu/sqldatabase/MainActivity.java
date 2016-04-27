@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -29,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
         mHelper = new DBHelper(this);
         mHelper.close();
         mShowDataTextView = (TextView) findViewById(R.id.showData);
-        //add line
     }
 
     public void add(View view) { //  Insert
@@ -40,8 +38,6 @@ public class MainActivity extends AppCompatActivity {
         db.insert(TABLE_NAME, null, values);
         userName.setText(""); // clear editText
     }
-
-
 
     public void show(View view) { //  Query
 
@@ -57,8 +53,10 @@ public class MainActivity extends AppCompatActivity {
             resultData.append(name).append(", ");
             resultData.append("\n");
         }
+        c.close();
         mShowDataTextView.setText(resultData);
     }
+
     public void showSortByName(View view) { //  Query
 
         SQLiteDatabase db = mHelper.getReadableDatabase();
@@ -73,15 +71,47 @@ public class MainActivity extends AppCompatActivity {
             resultData.append(name).append(", ");
             resultData.append("\n");
         }
+        c.close();
         sortData.setText(resultData);
+    }
+    public void showFirstData(View view) { //  Query
+
+        SQLiteDatabase db = mHelper.getReadableDatabase();
+        String[] projection = { _ID , USER_NAME  };
+        Cursor c = db.query(TABLE_NAME, projection, null, null, null, null, null, "1" );
+        StringBuilder resultData = new StringBuilder("");
+        while(c.moveToNext()) {
+            int id = c.getInt(0);
+            String name = c.getString(1);
+            resultData.append(id).append(": ");
+            resultData.append(name).append(", ");
+            resultData.append("\n");
+        }
+        c.close();
+        new AlertDialog.Builder(MainActivity.this)
+                .setTitle("First Data")
+                .setMessage(resultData)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).show();
     }
 
     public void delete(View view){ // Delete
         EditText deleteUserName = (EditText) findViewById(R.id.editUserName);
         String deleteName = deleteUserName.getText().toString();
+
         SQLiteDatabase db = mHelper.getWritableDatabase();
-        String where = USER_NAME + "='" + deleteName +"'"; //  name = ' deleteName'
-        db.delete(TABLE_NAME, where , null);
+        if(!deleteName.isEmpty()) {
+            //String where = USER_NAME + "='" + deleteName + "'"; //  name = ' deleteName'
+            String selection = USER_NAME + " = ? " ;
+            String[] selectionArgs = { deleteName };
+            db.delete(TABLE_NAME, selection, null);
+        } else {
+            db.delete(TABLE_NAME, null , null);
+        }
         deleteUserName.setText(""); // clear editText
     }
 
@@ -116,19 +146,22 @@ public class MainActivity extends AppCompatActivity {
         EditText editUserName = (EditText) findViewById(R.id.editUserName);
         String searchName = editUserName.getText().toString();
 
-        final String where = USER_NAME + "='" + searchName +"'"; //  name = ' deleteName'
+       // final String where = USER_NAME + "='" + searchName +"'"; //  name = ' deleteName'
 
-        Cursor mCursor = db.query(TABLE_NAME, new String[] { _ID, USER_NAME }, where, null, null, null, null, null);
+        final String selection = USER_NAME + " = ? ";
+        final String[] selectionArgs = { searchName };
+
+        Cursor cursor = db.query(TABLE_NAME, new String[] { _ID, USER_NAME }, selection, selectionArgs, null, null, null, null);
 
         StringBuilder resultData = new StringBuilder("RESULT: \n");
-        while(mCursor.moveToNext()){
-            int id = mCursor.getInt(0);
-            String name = mCursor.getString(1);
+        while(cursor.moveToNext()){
+            int id = cursor.getInt(0);
+            String name = cursor.getString(1);
             resultData.append(id).append(": ");
             resultData.append(name).append(", ");
             resultData.append("\n");
         }
-
+        cursor.close();
         new AlertDialog.Builder(MainActivity.this)
                 .setTitle("Search")
                 .setMessage(resultData)
