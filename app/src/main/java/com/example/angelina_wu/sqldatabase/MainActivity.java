@@ -37,9 +37,10 @@ public class MainActivity extends AppCompatActivity {
         SQLiteDatabase db = mHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(USER_NAME, userName.getText().toString());
-        values.put(USER_SCORE, Integer.getInteger(score.getText().toString()));
+        values.put(USER_SCORE, Integer.parseInt(score.getText().toString()));
         db.insert(TABLE_NAME, null, values);
-        userName.setText(""); // clear editText
+        userName.setText(""); // clear
+        score.setText(""); // clear
     }
 
     public void show(View view) { //  Query
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         String[] projection = { _ID, USER_NAME, USER_SCORE };
         Cursor c = db.query( TABLE_NAME, projection, null, null, null, null, null );
 
-        StringBuilder resultData = new StringBuilder("RESULT: \n");
+        StringBuilder resultData = new StringBuilder("All : \n\n");
         while(c.moveToNext()){
             int id = c.getInt(0);
             String name = c.getString(1);
@@ -62,18 +63,19 @@ public class MainActivity extends AppCompatActivity {
         mShowDataTextView.setText(resultData);
     }
 
-    public void showSortByName(View view) { //  Query
+    public void showSortByScore(View view) { //  Query
 
         SQLiteDatabase db = mHelper.getReadableDatabase();
-        String[] projection = { _ID , USER_NAME  };
-        Cursor c = db.query(TABLE_NAME, projection, null, null, null, null, USER_NAME );
-        TextView sortData = (TextView)findViewById(R.id.showData_Name) ;
-        StringBuilder resultData = new StringBuilder("RESULT: \n");
+        String[] projection = { USER_NAME , USER_SCORE  };
+        String orderBy = USER_SCORE + "  desc";
+        Cursor c = db.query(TABLE_NAME, projection, null, null, null, null, orderBy);
+        TextView sortData = (TextView)findViewById(R.id.showData_Score) ;
+        StringBuilder resultData = new StringBuilder("Score : \n\n");
         while(c.moveToNext()){
-            int id = c.getInt(0);
-            String name = c.getString(1);
-            resultData.append(id).append(": ");
-            resultData.append(name).append(", ");
+            String name = c.getString(0);
+            int score = c.getInt(1);
+            resultData.append(name).append("  :  ");
+            resultData.append(score);
             resultData.append("\n");
         }
         c.close();
@@ -82,14 +84,17 @@ public class MainActivity extends AppCompatActivity {
     public void showFirstData(View view) { //  Query
 
         SQLiteDatabase db = mHelper.getReadableDatabase();
-        String[] projection = { _ID , USER_NAME  };
-        Cursor c = db.query(TABLE_NAME, projection, null, null, null, null, null, "1" );
-        StringBuilder resultData = new StringBuilder("");
+        String[] projection = { _ID, USER_NAME, USER_SCORE  };
+        String orderBy = USER_SCORE + "  desc";
+        Cursor c = db.query(TABLE_NAME, projection, null, null, null, null, orderBy, "1" );
+        StringBuilder resultData = new StringBuilder(" The Hightest Score : ");
         while(c.moveToNext()) {
             int id = c.getInt(0);
             String name = c.getString(1);
-            resultData.append(id).append(": ");
-            resultData.append(name).append(", ");
+            int score = c.getInt(2);
+            resultData.append(score).append("\n ( ID : ");
+            resultData.append(id).append("  , name :  ");
+            resultData.append(name).append(" ) ");
             resultData.append("\n");
         }
         c.close();
@@ -106,6 +111,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void delete(View view){ // Delete
         EditText deleteUserName = (EditText) findViewById(R.id.editUserName);
+        EditText userScoreEditor = (EditText) findViewById(R.id.editScore);
+
         String deleteName = deleteUserName.getText().toString();
 
         SQLiteDatabase db = mHelper.getWritableDatabase();
@@ -113,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
             //String where = USER_NAME + "='" + deleteName + "'"; //  name = ' deleteName'
             String selection = USER_NAME + " = ? " ;
             String[] selectionArgs = { deleteName };
-            db.delete(TABLE_NAME, selection, null);
+            db.delete(TABLE_NAME, selection, selectionArgs);
         } else {
             db.delete(TABLE_NAME, null , null);
         }
@@ -130,18 +137,19 @@ public class MainActivity extends AppCompatActivity {
         LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
         final View v = inflater.inflate(R.layout.alert_dialog, null);
 
-        final String where = USER_NAME + "='" + oldName +"'"; //  name = ' deleteName'
-
+        //final String where = USER_NAME + "='" + oldName +"'"; //  name = ' deleteName'
+        final String selection = USER_NAME + " = ? " ;
+        final String[] selectionArgs = { oldName };
             new AlertDialog.Builder(MainActivity.this)
-                    .setTitle("Enter new name : ")
+                    .setTitle("Enter new score  : ")
                     .setView(v)
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            EditText editText = (EditText) (v.findViewById(R.id.updateUserName));
-                            String newName = editText.getText().toString();
-                            args.put(USER_NAME, newName);
-                            db.update(TABLE_NAME, args, where, null);
+                            EditText editText = (EditText) (v.findViewById(R.id.updateUserScore));
+                            String newscore = editText.getText().toString();
+                            args.put(USER_SCORE, newscore);
+                            db.update(TABLE_NAME, args, selection, selectionArgs);
                         }
                     }).show();
         editUserName.setText(""); // clear editText
@@ -155,15 +163,17 @@ public class MainActivity extends AppCompatActivity {
 
         final String selection = USER_NAME + " = ? ";
         final String[] selectionArgs = { searchName };
-
-        Cursor cursor = db.query(TABLE_NAME, new String[] { _ID, USER_NAME }, selection, selectionArgs, null, null, null, null);
+        String[] columns = { _ID, USER_NAME, USER_SCORE } ;
+        Cursor cursor = db.query(TABLE_NAME, columns , selection, selectionArgs, null, null, null, null);
 
         StringBuilder resultData = new StringBuilder("RESULT: \n");
         while(cursor.moveToNext()){
             int id = cursor.getInt(0);
             String name = cursor.getString(1);
+            int score = cursor.getInt(2);
             resultData.append(id).append(": ");
-            resultData.append(name).append(", ");
+            resultData.append(name).append("  -  ");
+            resultData.append(score);
             resultData.append("\n");
         }
         cursor.close();

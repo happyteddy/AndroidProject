@@ -4,8 +4,8 @@
     <string name="score">Score</string>
     <string name="add">Add</string>
     <string name="show">Show</string>
-    <string name="showname">Show/name</string>
-    <string name="showfirst">Show/first</string>
+    <string name="showScore">Show/score</string>
+    <string name="showFirst">Show/first</string>
     <string name="data">Data</string>
     <string name="upgrade">Upgrade</string>
     <string name="deleteData">Delete data: </string>

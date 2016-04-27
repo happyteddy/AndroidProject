@@ -11,39 +11,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <Button
-        android:id="@+id/showButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/show"
-        android:onClick="show"
-        android:layout_alignParentTop="true"/>
-        <Button
-            android:id="@+id/showButton_First"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/showfirst"
-            android:onClick="showFirstData"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
-        <Button
-            android:id="@+id/showButton_Name"
+            android:id="@+id/showButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/showname"
-            android:onClick="showSortByName"
+            android:text="@string/show"
+            android:onClick="show"
+            android:layout_alignParentTop="true"/>
+        <Button
+            android:id="@+id/showButton_Score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/showScore"
+            android:onClick="showSortByScore"
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@+id/showButton" />
         <Button
-            android:id="@+id/upgradeButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/upgrade"
-            android:onClick="upgrade"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true" />
+        android:id="@+id/showButton_First"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/showFirst"
+        android:onClick="showFirstData"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_toEndOf="@+id/showButton_Score"/>
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -113,7 +105,7 @@
             android:textSize="13pt"
             android:textColor="@color/colorAccent"/>
         <TextView
-            android:id="@+id/showData_Name"
+            android:id="@+id/showData_Score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/data"
@@ -122,4 +114,11 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true" />
     </RelativeLayout>
+    <Button
+        android:id="@+id/upgradeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/upgrade"
+        android:onClick="upgrade"/>
 </LinearLayout>
