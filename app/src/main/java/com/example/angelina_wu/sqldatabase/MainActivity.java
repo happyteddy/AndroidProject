@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         mHelper.close();
         mShowDataTextView = (TextView) findViewById(R.id.showData);
         show();
-        showSortByScore();
+        showResult();
     }
 
     public void add(View view) { //  Insert
@@ -38,13 +38,29 @@ public class MainActivity extends AppCompatActivity {
         EditText score = (EditText) findViewById(R.id.editScore);
         SQLiteDatabase db = mHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(USER_NAME, userName.getText().toString());
-        values.put(USER_SCORE, Integer.parseInt(score.getText().toString()));
-        db.insert(TABLE_NAME, null, values);
-        show();
-        showSortByScore();
-        userName.setText(""); // clear
-        score.setText(""); // clear
+        if ( (userName != null) && (score != null) ) {
+            if (!userName.getText().toString().isEmpty()) {
+                values.put(USER_NAME, userName.getText().toString());
+
+                try {
+                    values.put(USER_SCORE, Integer.parseInt(score.getText().toString()));
+                } catch (Exception e) {
+                    new AlertDialog.Builder(MainActivity.this)
+                            .setMessage("Default value is 0 !")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            }).show();
+                }
+                db.insert(TABLE_NAME, null, values);
+                show();
+                showResult();
+                userName.setText(""); // clear
+                score.setText(""); // clear
+            }
+        }
     }
 
     public void show() { //  Query
@@ -67,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         mShowDataTextView.setText(resultData);
     }
 
-    public void showSortByScore() { //  Query
+    public void showResult() { //  Query
 
         SQLiteDatabase db = mHelper.getReadableDatabase();
         String[] projection = { USER_NAME , USER_SCORE  };
@@ -129,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
             db.delete(TABLE_NAME, null , null);
         }
         show();
-        showSortByScore();
+        showResult();
         deleteUserName.setText(""); // clear editText
     }
 
@@ -159,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
                             args.put(USER_SCORE, newscore);
                             db.update(TABLE_NAME, args, selection, selectionArgs);
                             show();
-                            showSortByScore();
+                            showResult();
                         }
                     }).show();
         } else{
