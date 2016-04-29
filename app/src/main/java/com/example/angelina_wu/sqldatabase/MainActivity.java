@@ -29,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
         mHelper = new DBHelper(this);
         mHelper.close();
         mShowDataTextView = (TextView) findViewById(R.id.showData);
+        show();
+        showSortByScore();
     }
 
     public void add(View view) { //  Insert
@@ -39,11 +41,13 @@ public class MainActivity extends AppCompatActivity {
         values.put(USER_NAME, userName.getText().toString());
         values.put(USER_SCORE, Integer.parseInt(score.getText().toString()));
         db.insert(TABLE_NAME, null, values);
+        show();
+        showSortByScore();
         userName.setText(""); // clear
         score.setText(""); // clear
     }
 
-    public void show(View view) { //  Query
+    public void show() { //  Query
 
         SQLiteDatabase db = mHelper.getReadableDatabase();
         String[] projection = { _ID, USER_NAME, USER_SCORE };
@@ -63,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         mShowDataTextView.setText(resultData);
     }
 
-    public void showSortByScore(View view) { //  Query
+    public void showSortByScore() { //  Query
 
         SQLiteDatabase db = mHelper.getReadableDatabase();
         String[] projection = { USER_NAME , USER_SCORE  };
@@ -124,6 +128,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             db.delete(TABLE_NAME, null , null);
         }
+        show();
+        showSortByScore();
         deleteUserName.setText(""); // clear editText
     }
 
@@ -140,6 +146,8 @@ public class MainActivity extends AppCompatActivity {
         //final String where = USER_NAME + "='" + oldName +"'"; //  name = ' deleteName'
         final String selection = USER_NAME + " = ? " ;
         final String[] selectionArgs = { oldName };
+        Cursor cursor = db.query(TABLE_NAME, null , selection, selectionArgs, null, null, null, null);
+        if(cursor.moveToNext()) {
             new AlertDialog.Builder(MainActivity.this)
                     .setTitle("Enter new score  : ")
                     .setView(v)
@@ -150,8 +158,21 @@ public class MainActivity extends AppCompatActivity {
                             String newscore = editText.getText().toString();
                             args.put(USER_SCORE, newscore);
                             db.update(TABLE_NAME, args, selection, selectionArgs);
+                            show();
+                            showSortByScore();
                         }
                     }).show();
+        } else{
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("No data ! ")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).show();
+        }
+
         editUserName.setText(""); // clear editText
     }
     public void search(View view) {  //  Search
@@ -167,7 +188,9 @@ public class MainActivity extends AppCompatActivity {
         Cursor cursor = db.query(TABLE_NAME, columns , selection, selectionArgs, null, null, null, null);
 
         StringBuilder resultData = new StringBuilder("RESULT: \n");
+        boolean isDataExist = false;
         while(cursor.moveToNext()){
+            isDataExist = true;
             int id = cursor.getInt(0);
             String name = cursor.getString(1);
             int score = cursor.getInt(2);
@@ -176,17 +199,28 @@ public class MainActivity extends AppCompatActivity {
             resultData.append(score);
             resultData.append("\n");
         }
+
+        if(isDataExist) {
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("Search")
+                    .setMessage(resultData)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).show();
+        } else{
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("No data ! ")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).show();
+        }
         cursor.close();
-        new AlertDialog.Builder(MainActivity.this)
-                .setTitle("Search")
-                .setMessage(resultData)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                }).show();
-
         editUserName.setText(""); // clear editText
     }
 
